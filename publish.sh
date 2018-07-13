@@ -1,20 +1,30 @@
 #!/bin/bash
 
-FILE=${HOME}/Dropbox/PhD/phdthesis/Ramson_2017_AEXPR
+if [ -z "$1" ]
+  then
+    echo "Provide the path to your main file (without .pdf or .tex extension) as first argument"
+	exit 1
+fi
+
+FILE=$1 #${HOME}/Dropbox/PhD/phdthesis/Ramson_2017_AEXPR
 PDF_FILE=${FILE}.pdf
 TEX_FILE=${FILE}.tex
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PUBLIC=${HOME}/Dropbox/PhD/thesis-progress
+PUBLIC=${DIR} #${HOME}/Dropbox/PhD/thesis-progress
 JSON="${PUBLIC}/data.js"
 WORDS="${PUBLIC}/words.part"
 PAGES="${PUBLIC}/pages.part"
 
-echo pwd
-echo "${HOME}"
-echo "${PDF_FILE}"
-echo "${TEX_FILE}"
-#cat "${TEX_FILE}"
+#echo "${PDF_FILE}"
+#echo "${TEX_FILE}"
+#echo "${DIR}"
+
+if [ ! -f ${TEX_FILE} ]; 	
+then
+  echo "Error: Could not find .tex file at ${TEX_FILE}"
+  exit 1
+fi
 
 if [ ! -f ${PDF_FILE} ]; 	
 then
