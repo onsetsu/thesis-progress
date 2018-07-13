@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My Thesis</title>
+    <meta name="description" content="Thesis Progress">
+    <meta name="author" content="Stephi">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="./bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+      }
+      .label.words {
+        background-color: #46A546;
+      }
+      .label.pages {
+        background-color: #F89406;
+      }
+      .thumbnail.page {
+        width: 60px;
+        height: 85px;
+      }
+      #plot {
+        width: 640px;
+        height: 340px;
+      }
+      .hero-unit {
+             background-color: #e0e0e0;
+             text-shadow: #fff 0 1px 0;
+      }
+    </style>
+
+
+    <script type="text/javascript" src="jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="protovis.min.js"></script>
+    <script type="text/javascript" src="data.js"></script>
+
+    <script type="text/javascript">
+    function dateToUnix(date) {
+        return Math.round(+date / 1000);
+    }
+    </script>
+
+     <script type="text/javascript">
+         var firstDate = new Date(2017, 12 - 1,  1)
+	 var expectedDate = new Date(2019, 6 -1, 31, 23, 59, 59)
+         var firstDay = dateToUnix(firstDate);
+         var expectedEnd = dateToUnix(expectedDate);
+    </script>
+    <script type="text/javascript+protovis">
+
+      function plot() {
+        var height = 260, width = 540;
+        var wordscale = pv.Scale.linear(0, 30000).range(0, height);
+        var pagescale = pv.Scale.linear(0, 102).range(0, height);
+        var timescale = pv.Scale.linear(firstDay, expectedEnd).range(0, width);
+        var wc = "#46A546";
+        var pc = "#F89406";
+
+        var vis = new pv.Panel()
+          .left(50)
+          .bottom(20)
+          .right(50)
+          .top(20)
+          .width(width)
+          .height(height);
+
+        // y-axis.
+        vis.add(pv.Rule)
+          .data(wordscale.ticks(8))
+          .bottom(wordscale)
+          .strokeStyle("#eee")
+          .anchor("left").add(pv.Label)
+          .text(wordscale.tickFormat)
+
+        // y-axis.
+        vis.add(pv.Rule)
+          .data(pagescale.ticks(8))
+          .bottom(pagescale)
+          .strokeStyle("#ffff")
+          .anchor("right").add(pv.Label)
+          .text(pagescale.tickFormat)
+
+	// ideal line
+        vis.add(pv.Line)
+	  .data([{x: firstDay, y: 0}, {x: expectedEnd, y: 85}])
+          .left(function(d) timescale(d.x))
+          .bottom(function(d) pagescale(d.y))
+          .lineWidth(1)
+          .strokeStyle("#ccc");
+
+        // pages.
+        vis.add(pv.Line)
+          .data(pages)
+          .left(function(d) timescale(d.x))
+          .bottom(function(d) pagescale(d.y))
+          .lineWidth(6)
+          .interpolate("step-after")
+          .strokeStyle(pc);
+
+        vis.add(pv.Dot)
+        .data([pages[pages.length-1]])
+          .left(function(d) timescale(d.x))
+          .bottom(function(d) pagescale(d.y))
+          .size(32)
+          .lineWidth(6)
+          .strokeStyle(pc)
+          .fillStyle("#fff");
+
+        // words.
+        vis.add(pv.Line)
+          .data(words)
+          .left(function(d) timescale(d.x))
+          .bottom(function(d) wordscale(d.y))
+          .lineWidth(6)
+          .strokeStyle(wc);
+
+        vis.add(pv.Dot)
+        .data([words[words.length-1]])
+          .left(function(d) timescale(d.x))
+          .bottom(function(d) wordscale(d.y))
+          .size(32)
+          .lineWidth(6)
+          .strokeStyle(wc)
+          .fillStyle("#fff");
+
+        vis.root.render();
+      }
+    </script>
+
+    <script type="text/javascript">
+
+      var wordcount = words[words.length-1].y;
+      var pagecount = pages[pages.length-1].y;
+
+      var per_time = (expectedEnd - Date.now() / 1000 ) / (expectedEnd - firstDay);
+      var per_words = (25000 - wordcount) / 25000;
+
+      var add_words = Math.max(0, Math.floor((per_words - per_time) * 25000) + 1);
+
+      jQuery(function($) {
+
+        // number insertions.
+
+        $("#words").html(wordcount);
+        $("#pages").html(pagecount);
+
+        $("#words-missing").html(25000 - wordcount);
+        $("#pages-missing").html(85 - pagecount);
+
+        $("#per-time").html(Math.floor(1000 * per_time) / 10 + "%");
+        $("#per-words").html(Math.floor(1000 * per_words) / 10 + "%");
+
+        $("#add-words").html(add_words);
+
+        // thumbnail insertions.
+
+        for(var i = 1; i <= pagecount; i++) {
+
+          $('#thumbnails').append($('<li>').append($('<a>').append(
+              '<img class="thumbnail page" src="images/thumbnail' + i + '.jpg">')));
+
+        }
+
+      });
+
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="hero-unit">
+        <h1>Thesis Progress!</h1>
+        <p>Stephi is a, well, developer? Researcher? This is procrastination(!). It is also an exclusive view on Stephi's thesis writing progress. Keep your fingers crossed, she'll need it.</p>
+      </div>
+
+      <div class="row">
+        <div class="span5">
+          <h2>Numbers</h2>
+          <p>
+
+	  Stephi is writing her thesis. She wants to be done before
+	  April, 1 2014, and to achieve that goal, the writing
+            must get a lot faster.
+
+            So far, she has written
+            <span id="words" class="label words">?</span>
+            words on
+            <span id="pages" class="label pages">?</span>
+            pages.
+
+          </p>
+          <p>
+
+            To the goal of roughly
+            <span class="label default">25000</span>
+            words and
+            <span class="label default">85</span>
+            pages total, there are still
+            <span id="pages-missing" class="label important">?</span>
+            pages and
+            <span id="words-missing" class="label important">?</span>
+            words missing.
+
+          </p>
+          <p>
+
+            This means that in the remaining
+            <span id="per-time" class="label notice">?</span>
+            of the time she has to do
+            <span id="per-words" class="label notice">?</span>
+            of the writing, measured in words.
+            To break even, she has to write
+            <span id="add-words" class="label notice">?</span>
+            additional words.
+
+            If you happen to see Stephi doing something that not
+            writing, you may punch her and then bring her a coffee,
+            cookies or what ever you would need to get back to writing.
+
+          </p>
+
+        </div>
+
+        <div id="plot" class="span11">
+          <h2>Progress Plot</h2>
+          <script type="text/javascript+protovis">
+            plot();
+          </script>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="span16">
+          <h2>Thumbnails</h2>
+
+          <ul id="thumbnails" class="media-grid">
+          </ul>
+
+        </div>
+      </div>
+
+      <footer>
+        <p>&copy; Martin 2011, gracefully given to Tobias, who improved it and passed the torch onto Tim. Then the torch was stolen by Stephi (but with permission ;) ). (This is becoming kind of a thing!)</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
+
