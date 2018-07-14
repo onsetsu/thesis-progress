@@ -56,8 +56,8 @@
     </script>
 
      <script type="text/javascript">
-         var firstDate = new Date(2018, 7 - 1,  13)
-	 var expectedDate = new Date(2018, 7 -1, 13, 23, 59, 59)
+         var firstDate = new Date(2018, 7 - 1,  16)
+	 var expectedDate = new Date(2019, 9 -1, 30, 23, 59, 59)
          var firstDay = dateToUnix(firstDate);
          var expectedEnd = dateToUnix(expectedDate);
     </script>
@@ -213,9 +213,9 @@
           <p>
 
             To the goal of roughly
-            <span class="label default target-words">?</span>
+            <span id="target-words" class="label default">?</span>
             words and
-            <span class="label default target-pages">?</span>
+            <span id="target-pages" class="label default">?</span>
             pages total, there are still
             <span id="pages-missing" class="label important">?</span>
             pages and
