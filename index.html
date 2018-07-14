@@ -137,6 +137,10 @@
 
     <script type="text/javascript">
 
+      // computed through existing theses
+      var targetWordcount = 59104;
+      var targetPagecount = 192;
+
       var wordcount = words[words.length-1].y;
       var pagecount = pages[pages.length-1].y;
 
@@ -148,6 +152,9 @@
       jQuery(function($) {
 
         // number insertions.
+
+        $("#target-words").html(targetWordcount);
+        $("#target-pages").html(targetPagecount);
 
         $("#words").html(wordcount);
         $("#pages").html(pagecount);
@@ -203,9 +210,9 @@
           <p>
 
             To the goal of roughly
-            <span class="label default">25000</span>
+            <span class="label default target-words">?</span>
             words and
-            <span class="label default">85</span>
+            <span class="label default target-pages">?</span>
             pages total, there are still
             <span id="pages-missing" class="label important">?</span>
             pages and
