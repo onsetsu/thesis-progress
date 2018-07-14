@@ -46,6 +46,13 @@
     function dateToUnix(date) {
         return Math.round(+date / 1000);
     }
+	
+    </script>
+
+     <script type="text/javascript">
+	  // derived from existing theses
+      var targetWordcount = 59104;
+      var targetPagecount = 192;
     </script>
 
      <script type="text/javascript">
@@ -58,8 +65,8 @@
 
       function plot() {
         var height = 260, width = 540;
-        var wordscale = pv.Scale.linear(0, 30000).range(0, height);
-        var pagescale = pv.Scale.linear(0, 102).range(0, height);
+        var wordscale = pv.Scale.linear(0, 65000).range(0, height);
+        var pagescale = pv.Scale.linear(0, 200).range(0, height);
         var timescale = pv.Scale.linear(firstDay, expectedEnd).range(0, width);
         var wc = "#46A546";
         var pc = "#F89406";
@@ -90,7 +97,7 @@
 
 	// ideal line
         vis.add(pv.Line)
-	  .data([{x: firstDay, y: 0}, {x: expectedEnd, y: 85}])
+	  .data([{x: firstDay, y: 0}, {x: expectedEnd, y: targetPagecount}])
           .left(function(d) timescale(d.x))
           .bottom(function(d) pagescale(d.y))
           .lineWidth(1)
@@ -137,17 +144,13 @@
 
     <script type="text/javascript">
 
-      // computed through existing theses
-      var targetWordcount = 59104;
-      var targetPagecount = 192;
-
       var wordcount = words[words.length-1].y;
       var pagecount = pages[pages.length-1].y;
 
       var per_time = (expectedEnd - Date.now() / 1000 ) / (expectedEnd - firstDay);
-      var per_words = (25000 - wordcount) / 25000;
+      var per_words = (targetWordcount - wordcount) / targetWordcount;
 
-      var add_words = Math.max(0, Math.floor((per_words - per_time) * 25000) + 1);
+      var add_words = Math.max(0, Math.floor((per_words - per_time) * targetWordcount) + 1);
 
       jQuery(function($) {
 
@@ -159,8 +162,8 @@
         $("#words").html(wordcount);
         $("#pages").html(pagecount);
 
-        $("#words-missing").html(25000 - wordcount);
-        $("#pages-missing").html(85 - pagecount);
+        $("#words-missing").html(targetWordcount - wordcount);
+        $("#pages-missing").html(targetPagecount - pagecount);
 
         $("#per-time").html(Math.floor(1000 * per_time) / 10 + "%");
         $("#per-words").html(Math.floor(1000 * per_words) / 10 + "%");
@@ -266,4 +269,3 @@
 
   </body>
 </html>
-
