@@ -170,15 +170,6 @@
 
         $("#add-words").html(add_words);
 
-        // thumbnail insertions.
-
-        for(var i = 1; i <= pagecount; i++) {
-
-          $('#thumbnails').append($('<li>').append($('<a>').append(
-              '<img class="thumbnail page" src="images/thumbnail' + i + '.jpg">')));
-
-        }
-
       });
 
     </script>
@@ -257,6 +248,20 @@
 
           <ul id="thumbnails" class="media-grid">
           </ul>
+	    <script type="text/javascript">
+
+	      jQuery(function($) {
+
+		for(var i = 1; i <= pagecount; i++) {
+
+		  $('#thumbnails').append($('<li>').append($('<a>').append(
+		      '<img class="thumbnail page" src="images/thumbnail' + i + '.jpg">')));
+
+		}
+
+	      });
+
+	    </script>
 
         </div>
       </div>
